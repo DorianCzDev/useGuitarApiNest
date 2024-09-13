@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Global, Module } from '@nestjs/common';
-import { Product } from 'src/products/product.entity';
+import { Products } from 'src/products/products.entity';
 import { ConfigService } from '@nestjs/config';
 // import connectionSource from './ormconfig';
 
@@ -17,11 +17,11 @@ import { ConfigService } from '@nestjs/config';
             type: 'postgres',
             host: 'localhost',
             port: 5432,
-            database: 'devuseguitar',
+            database: config.get<string>('DB_NAME'),
             password: config.get<string>('DB_PASSWORD'),
             username: config.get<string>('DB_USERNAME'),
-            entities: [Product],
-            synchronize: false,
+            entities: [Products],
+            synchronize: true,
           });
           await dataSource.initialize();
           console.log('Database connected successfully');

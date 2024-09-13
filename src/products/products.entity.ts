@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Product {
+export class Products {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -9,6 +9,7 @@ export class Product {
   name: string;
 
   @Column({
+    type: 'enum',
     enum: ['guitar', 'amp', 'pickup', 'multi effect'],
     nullable: false,
   })
