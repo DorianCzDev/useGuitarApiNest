@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewsService } from './reviews.service';
 
@@ -12,5 +12,13 @@ export class ReviewsController {
     @Body() body: CreateReviewDto,
   ) {
     return this.reviewsService.create(productId, body);
+  }
+
+  @Get(':productId')
+  getReview(
+    @Param('productId') productId: string,
+    @Query('rating') rating: string,
+  ) {
+    return this.reviewsService.get(productId, rating);
   }
 }

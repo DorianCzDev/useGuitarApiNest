@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -15,6 +16,7 @@ export class Products {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column({ unique: true, nullable: false, length: 50 })
   name: string;
 

@@ -1,10 +1,5 @@
-import { GetAllProductsDto } from 'src/products/dto/get-all-products.dto';
-
-export default function featureToArray(
-  products: GetAllProductsDto[],
-  feature: string,
-) {
-  let featureArray = products.map((product: GetAllProductsDto) => {
+export default function featureToArray(products: {}[], feature: string) {
+  let featureArray = products.map((product: {}) => {
     return product?.[feature];
   });
 
