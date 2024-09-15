@@ -9,9 +9,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductsService } from './products.service';
+import { GetAllProductsDto } from './dto/get-all-products.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Products } from './products.entity';
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {
@@ -22,7 +22,7 @@ export class ProductsController {
   }
 
   @Get()
-  getAllProducts(@Query() query: Partial<Products>) {
+  getAllProducts(@Query() query: Partial<GetAllProductsDto>) {
     return this.productsService.getAll(query);
   }
 

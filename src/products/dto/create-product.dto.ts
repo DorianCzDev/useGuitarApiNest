@@ -15,6 +15,12 @@ export class CreateProductDto {
   @IsEnum(['guitar', 'amp', 'pickup', 'multi effect'])
   category: string;
 
+  @IsString()
+  body: string;
+
+  @IsString()
+  neck: string;
+
   @IsNumber()
   @Min(0)
   @Max(1000000)

@@ -31,6 +31,12 @@ export class Products {
   @Column({ default: false })
   stock: boolean;
 
+  @Column()
+  body: string;
+
+  @Column()
+  neck: string;
+
   @OneToMany(() => Reviews, (review) => review.product)
   reviews: Reviews[];
 
