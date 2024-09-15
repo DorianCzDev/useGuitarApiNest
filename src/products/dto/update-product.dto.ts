@@ -1,22 +1,22 @@
 import {
+  IsBoolean,
   IsEnum,
   IsNumber,
+  IsOptional,
   IsString,
-  Max,
-  MaxLength,
-  Min,
 } from 'class-validator';
 
-export class CreateProductDto {
+export class UpdateProductDto {
   @IsString()
-  @MaxLength(50)
+  @IsOptional()
   name: string;
   @IsString()
   @IsEnum(['guitar', 'amp', 'pickup', 'multi effect'])
+  @IsOptional()
   category: string;
-
   @IsNumber()
-  @Min(0)
-  @Max(1000000)
+  @IsOptional()
   price: number;
+  @IsBoolean()
+  stock: boolean;
 }

@@ -5,6 +5,7 @@ import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from './datasource/typeorm.module';
 import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { APP_PIPE } from '@nestjs/core';
     }),
     ProductsModule,
     TypeOrmModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [

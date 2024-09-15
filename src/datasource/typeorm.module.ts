@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import { Global, Module } from '@nestjs/common';
 import { Products } from 'src/products/products.entity';
 import { ConfigService } from '@nestjs/config';
+import { Reviews } from 'src/reviews/reviews.entity';
 // import connectionSource from './ormconfig';
 
 @Global()
@@ -20,7 +21,7 @@ import { ConfigService } from '@nestjs/config';
             database: config.get<string>('DB_NAME'),
             password: config.get<string>('DB_PASSWORD'),
             username: config.get<string>('DB_USERNAME'),
-            entities: [Products],
+            entities: [Products, Reviews],
             synchronize: true,
           });
           await dataSource.initialize();
