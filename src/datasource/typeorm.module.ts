@@ -3,6 +3,7 @@ import { Global, Module } from '@nestjs/common';
 import { Products } from 'src/products/products.entity';
 import { ConfigService } from '@nestjs/config';
 import { Reviews } from 'src/reviews/reviews.entity';
+import { Users } from 'src/users/users.entity';
 // import connectionSource from './ormconfig';
 
 @Global()
@@ -21,7 +22,7 @@ import { Reviews } from 'src/reviews/reviews.entity';
             database: config.get<string>('DB_NAME'),
             password: config.get<string>('DB_PASSWORD'),
             username: config.get<string>('DB_USERNAME'),
-            entities: [Products, Reviews],
+            entities: [Products, Reviews, Users],
             synchronize: true,
           });
           await dataSource.initialize();

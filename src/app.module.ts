@@ -1,11 +1,13 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { TypeOrmModule } from './datasource/typeorm.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { ReviewsModule } from './reviews/reviews.module';
+import { UsersModule } from './users/users.module';
+import * as cookieParser from 'cookie-parser';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     ProductsModule,
     TypeOrmModule,
     ReviewsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [
@@ -28,4 +31,11 @@ import { ReviewsModule } from './reviews/reviews.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private configService: ConfigService) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(cookieParser(this.configService.get('JWT_SECRET')))
+      .forRoutes('*');
+  }
+}
