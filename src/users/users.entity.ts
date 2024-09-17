@@ -30,6 +30,12 @@ export class Users {
   @Column({ nullable: true })
   refreshToken: string;
 
+  @Column({ nullable: true })
+  forgotPasswordToken: string;
+
+  @Column({ nullable: true })
+  forgotPasswordTokenExpirationDate: Date;
+
   @OneToMany(() => Reviews, (review) => review.user)
   reviews: Reviews[];
 
