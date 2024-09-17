@@ -1,4 +1,5 @@
-import { Products } from 'src/products/products.entity';
+import { Users } from '../users/users.entity';
+import { Products } from '../products/products.entity';
 import {
   Check,
   Column,
@@ -29,6 +30,12 @@ export class Reviews {
     onDelete: 'CASCADE',
   })
   product: number;
+
+  @ManyToOne(() => Users, (user) => user.reviews, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  user: number;
 
   @CreateDateColumn()
   created_at: Date;

@@ -1,18 +1,23 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Request } from 'express';
+import featureToArray from 'src/utils/featureToArray';
 import { Repository } from 'typeorm';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { Reviews } from './reviews.entity';
-import featureToArray from 'src/utils/featureToArray';
 
 @Injectable()
 export class ReviewsService {
   constructor(@InjectRepository(Reviews) private repo: Repository<Reviews>) {}
 
-  create(productId: string, reviewDto: CreateReviewDto) {
+  create(productId: string, reviewDto: CreateReviewDto, req: Request) {
     const review = this.repo.create(reviewDto);
     review.product = parseInt(productId);
-
+    review.user = req.user.id;
     return this.repo.save(review);
   }
 

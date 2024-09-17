@@ -1,7 +1,9 @@
+import { Reviews } from '../reviews/reviews.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -24,8 +26,12 @@ export class Users {
     default: 'admin',
   })
   role: string;
+
   @Column({ nullable: true })
   refreshToken: string;
+
+  @OneToMany(() => Reviews, (review) => review.user)
+  reviews: Reviews[];
 
   @CreateDateColumn()
   created_at: Date;

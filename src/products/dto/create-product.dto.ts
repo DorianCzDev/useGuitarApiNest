@@ -1,6 +1,7 @@
 import {
   IsEnum,
   IsNumber,
+  IsOptional,
   IsString,
   Max,
   MaxLength,
@@ -16,9 +17,11 @@ export class CreateProductDto {
   category: string;
 
   @IsString()
+  @IsOptional()
   body: string;
 
   @IsString()
+  @IsOptional()
   neck: string;
 
   @IsNumber()

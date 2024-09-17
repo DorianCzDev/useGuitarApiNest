@@ -1,4 +1,4 @@
-import { Reviews } from 'src/reviews/reviews.entity';
+import { Reviews } from '../reviews/reviews.entity';
 import {
   Check,
   Column,
@@ -33,10 +33,10 @@ export class Products {
   @Column({ default: false })
   stock: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   body: string;
 
-  @Column()
+  @Column({ nullable: true })
   neck: string;
 
   @OneToMany(() => Reviews, (review) => review.product)

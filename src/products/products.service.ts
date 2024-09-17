@@ -8,13 +8,13 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { Products } from './products.entity';
 import { GetAllProductsDto } from './dto/get-all-products.dto';
-import featureToArray from 'src/utils/featureToArray';
+import featureToArray from '../utils/featureToArray';
 
 @Injectable()
 export class ProductsService {
   constructor(@InjectRepository(Products) private repo: Repository<Products>) {}
 
-  async create(productDto: CreateProductDto) {
+  async create(productDto: Partial<CreateProductDto>) {
     const isExist = await this.repo.findOneBy({ name: productDto.name });
     if (isExist) {
       throw new BadRequestException('Product name must be unique.');

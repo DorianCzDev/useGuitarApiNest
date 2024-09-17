@@ -14,6 +14,6 @@ import { AuthenticateUser } from 'src/middlewares/authentication.middleware';
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthenticateUser).forRoutes('products');
+    consumer.apply(AuthenticateUser).forRoutes('products', 'reviews');
   }
 }

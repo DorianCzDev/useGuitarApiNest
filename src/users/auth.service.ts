@@ -8,7 +8,7 @@ import { Users } from './users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Response } from 'express';
-import { cookieResponse } from 'src/utils/jwt';
+import { cookieResponse } from '../utils/jwt';
 import * as crypto from 'crypto';
 
 @Injectable()
