@@ -13,7 +13,7 @@ export class Users {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 40 })
   email: string;
 
   @Column()
@@ -22,7 +22,6 @@ export class Users {
   @Column({
     type: 'enum',
     enum: ['admin', 'user'],
-    nullable: false,
     default: 'admin',
   })
   role: string;

@@ -17,26 +17,25 @@ export class Products {
   id: number;
 
   @Index()
-  @Column({ unique: true, nullable: false, length: 50 })
+  @Column({ unique: true, length: 80 })
   name: string;
 
   @Column({
     type: 'enum',
     enum: ['guitar', 'amp', 'pickup', 'multi effect'],
-    nullable: false,
   })
   category: string;
 
-  @Column({ nullable: false })
+  @Column()
   price: number;
 
   @Column({ default: false })
   stock: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 40 })
   body: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, length: 40 })
   neck: string;
 
   @OneToMany(() => Reviews, (review) => review.product)

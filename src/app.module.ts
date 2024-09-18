@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
+import { DeliveryMethodsModule } from './delivery-methods/delivery-methods.module';
 import * as cookieParser from 'cookie-parser';
 
 @Module({
@@ -19,6 +20,7 @@ import * as cookieParser from 'cookie-parser';
     TypeOrmModule,
     ReviewsModule,
     UsersModule,
+    DeliveryMethodsModule,
   ],
   controllers: [AppController],
   providers: [

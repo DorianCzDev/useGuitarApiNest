@@ -1,17 +1,16 @@
 import {
   Body,
   Controller,
-  Param,
   Patch,
   Post,
   Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { updateUserPasswordDto } from './dto/update-user-password.dto';
-import { UsersService } from './users.service';
 import { Request } from 'express';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { updateUserPasswordDto } from './dto/update-user-password.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
