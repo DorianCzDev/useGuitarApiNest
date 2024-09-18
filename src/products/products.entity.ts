@@ -1,3 +1,4 @@
+import { OrderProducts } from 'src/orders/order-products.entity';
 import { Reviews } from '../reviews/reviews.entity';
 import {
   Check,
@@ -5,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -40,6 +42,9 @@ export class Products {
 
   @OneToMany(() => Reviews, (review) => review.product)
   reviews: Reviews[];
+
+  @OneToMany(() => OrderProducts, (order) => order.product)
+  orderProducts: number;
 
   @CreateDateColumn()
   created_at: Date;

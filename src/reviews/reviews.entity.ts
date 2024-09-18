@@ -26,13 +26,11 @@ export class Reviews {
   is_reported: boolean;
 
   @ManyToOne(() => Products, (product) => product.reviews, {
-    nullable: false,
     onDelete: 'CASCADE',
   })
   product: number;
 
   @ManyToOne(() => Users, (user) => user.reviews, {
-    nullable: false,
     onDelete: 'CASCADE',
   })
   user: number;

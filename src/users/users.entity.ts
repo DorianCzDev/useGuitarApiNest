@@ -1,8 +1,10 @@
+import { Orders } from 'src/orders/orders.entity';
 import { Reviews } from '../reviews/reviews.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -37,6 +39,9 @@ export class Users {
 
   @OneToMany(() => Reviews, (review) => review.user)
   reviews: Reviews[];
+
+  @OneToMany(() => Orders, (order) => order.user)
+  orders: Orders;
 
   @CreateDateColumn()
   created_at: Date;

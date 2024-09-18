@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 import { Reviews } from '../reviews/reviews.entity';
 import { Users } from '../users/users.entity';
 import { DeliveryMethods } from '../delivery-methods/delivery-methods.entity';
+import { OrderProducts } from 'src/orders/order-products.entity';
+import { Orders } from 'src/orders/orders.entity';
 // import connectionSource from './ormconfig';
 
 @Global()
@@ -23,7 +25,14 @@ import { DeliveryMethods } from '../delivery-methods/delivery-methods.entity';
             database: config.get<string>('DB_NAME'),
             password: config.get<string>('DB_PASSWORD'),
             username: config.get<string>('DB_USERNAME'),
-            entities: [Products, Reviews, Users, DeliveryMethods],
+            entities: [
+              Products,
+              Reviews,
+              Users,
+              DeliveryMethods,
+              OrderProducts,
+              Orders,
+            ],
             synchronize: true,
           });
           await dataSource.initialize();
