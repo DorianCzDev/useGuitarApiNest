@@ -7,6 +7,7 @@ import { Users } from '../users/users.entity';
 import { DeliveryMethods } from '../delivery-methods/delivery-methods.entity';
 import { OrderProducts } from 'src/orders/order-products.entity';
 import { Orders } from 'src/orders/orders.entity';
+import { Images } from 'src/products/images.entity';
 // import connectionSource from './ormconfig';
 
 @Global()
@@ -32,6 +33,7 @@ import { Orders } from 'src/orders/orders.entity';
               DeliveryMethods,
               OrderProducts,
               Orders,
+              Images,
             ],
             synchronize: true,
           });

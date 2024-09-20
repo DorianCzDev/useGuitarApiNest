@@ -16,6 +16,13 @@ export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthenticateUser)
-      .forRoutes('products', 'reviews', 'users', 'delivery', 'orders');
+      .forRoutes(
+        'products',
+        'reviews',
+        'users',
+        'delivery',
+        'orders',
+        'auth/signout',
+      );
   }
 }

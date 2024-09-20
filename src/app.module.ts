@@ -9,6 +9,7 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { UsersModule } from './users/users.module';
 import { DeliveryMethodsModule } from './delivery-methods/delivery-methods.module';
 import { OrdersModule } from './orders/orders.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import * as cookieParser from 'cookie-parser';
 
 @Module({
@@ -23,6 +24,7 @@ import * as cookieParser from 'cookie-parser';
     UsersModule,
     DeliveryMethodsModule,
     OrdersModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
   providers: [
@@ -31,6 +33,8 @@ import * as cookieParser from 'cookie-parser';
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         whitelist: true,
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
       }),
     },
   ],
