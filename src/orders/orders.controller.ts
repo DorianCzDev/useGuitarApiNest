@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -25,8 +26,18 @@ export class OrdersController {
 
   @Get()
   @UseGuards(AdminGuard)
-  getAllOrders() {
-    return this.ordersService.getAll();
+  getAllOrders(
+    @Query('page') page: string,
+    @Query('id') id: string,
+    @Query('last_name') lastName: string,
+    @Query('email') email: string,
+  ) {
+    return this.ordersService.getAll(
+      parseInt(page),
+      parseInt(id),
+      lastName,
+      email,
+    );
   }
 
   @Get('user')

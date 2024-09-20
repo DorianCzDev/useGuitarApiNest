@@ -91,10 +91,44 @@ export class OrdersService {
     return order;
   }
 
-  async getAll() {
-    const orders = await this.ordersRepo.find({});
+  async getAll(
+    page: number,
+    id: number | null,
+    lastName: string | null,
+    email: string | null,
+  ) {
+    const result = this.ordersRepo
+      .createQueryBuilder('orders')
+      .select('orders.*')
+      .addSelect('jsonb_agg(order_products.*)', 'orderProducts')
+      .leftJoin('order_products', 'order_products', 'orders.id = order_id')
+      .groupBy('orders.id');
 
-    return orders;
+    if (id) {
+      result.andWhere(`orders.id = :${id}`, { [id]: id });
+    }
+    if (lastName) {
+      result.andWhere(`orders.last_name = :${lastName}`, {
+        [lastName]: lastName,
+      });
+    }
+    if (email) {
+      result.andWhere(`orders.email = :${email}`, { [email]: email });
+    }
+
+    const limit = 10;
+
+    const currPage = page || 1;
+
+    const offset = (currPage - 1) * limit;
+
+    result.offset(offset).limit(limit);
+
+    const ordersCount = await result.getCount();
+
+    const orders = await result.getRawMany();
+
+    return { ordersCount, orders };
   }
 
   async get(id: number, req: Request) {

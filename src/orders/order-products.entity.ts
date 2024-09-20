@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -33,6 +34,7 @@ export class OrderProducts {
   @ManyToOne(() => Orders, (order) => order.orderProducts, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'order_id' })
   order: number;
 
   @CreateDateColumn()

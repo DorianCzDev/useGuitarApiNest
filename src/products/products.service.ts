@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { FindOptionsUtils, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import featureToArray from '../utils/featureToArray';
 import { CreateProductDto } from './dto/create-product.dto';
 import { GetAllProductsDto } from './dto/get-all-products.dto';
@@ -26,11 +26,6 @@ export class ProductsService {
       throw new BadRequestException('Product name must be unique.');
     }
     const product = this.repo.create(productDto);
-
-    // if edit
-    if (!images) {
-      return this.repo.save(product);
-    }
 
     const maxSize = 1024 * 1024 * 2; //2Mb
 
@@ -96,7 +91,9 @@ export class ProductsService {
       .select('products.*')
       .addSelect('COUNT("product_id")', 'reviews_number')
       .addSelect('AVG(rating)', 'avg_rating')
+      .addSelect('jsonb_agg(images.*)', 'images')
       .leftJoin('reviews', 'reviews', 'products.id = reviews.product_id')
+      .innerJoin('images', 'images', 'products.id = "productId"')
       .groupBy('products.id');
 
     let queryEntries = Object.entries(query);
@@ -178,14 +175,71 @@ export class ProductsService {
     return product;
   }
 
-  async update(id: number, body: Partial<Products>) {
+  async update(
+    id: number,
+    body: Partial<CreateProductDto>,
+    images: Array<Express.Multer.File>,
+  ) {
     const product = await this.repo.findOneBy({ id });
     if (!product) {
       throw new NotFoundException('Product not found');
     }
-    Object.assign(product, body);
 
-    return this.repo.save(product);
+    Object.assign(product, body);
+    await this.repo.save(product);
+    if (!images) {
+      return product;
+    }
+
+    const maxSize = 1024 * 1024 * 2; //2Mb
+
+    let occuringError: string;
+    if (images.length > 1) {
+      for (const image of images) {
+        if (!image.mimetype.startsWith('image')) {
+          occuringError = 'Please upload image';
+        }
+        if (image.size > maxSize) {
+          occuringError = 'Please upload image smaller than 2Mb';
+        }
+      }
+    } else if (images.length === 1) {
+      if (!images[0].mimetype.startsWith('image')) {
+        occuringError = 'Please upload image';
+      }
+      if (images[0].size > maxSize) {
+        occuringError = 'Please upload image smaller than 2Mb';
+      }
+    }
+    if (occuringError) {
+      await this.repo.remove(product);
+      throw new BadRequestException(occuringError);
+    }
+
+    if (images.length > 1) {
+      for (const image of images) {
+        const imageResult = await this.cloudinaryService.uploadFile(image);
+
+        const newImage = this.imagesRepo.create({
+          cloudinary_image_id: imageResult.public_id,
+          image_url: imageResult.secure_url,
+          product: product,
+        });
+
+        await this.imagesRepo.save(newImage);
+      }
+    } else if (images.length === 1) {
+      const imageResult = await this.cloudinaryService.uploadFile(images[0]);
+      const newImage = this.imagesRepo.create({
+        cloudinary_image_id: imageResult.public_id,
+        image_url: imageResult.secure_url,
+        product: product,
+      });
+
+      await this.imagesRepo.save(newImage);
+    }
+
+    return product;
   }
 
   async remove(id: number) {
@@ -193,6 +247,7 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException('Product not found');
     }
+
     return this.repo.remove(product);
   }
 
@@ -212,5 +267,61 @@ export class ProductsService {
       products = [...products, cartProduct];
     }
     return products;
+  }
+
+  async deleteImage(name: string, publicId: string) {
+    if (!publicId) {
+      throw new BadRequestException('Please provide all required values');
+    }
+    const product = await this.repo.findOneBy({ name });
+
+    if (!product) {
+      throw new NotFoundException(
+        `No image with publicId: ${publicId} related to product: ${name}`,
+      );
+    }
+
+    if (product.images.length === 1) {
+      throw new BadRequestException(
+        'Each product must have at least one image related to it.',
+      );
+    }
+
+    let imageIndex: number;
+    for (const [index, image] of product.images.entries()) {
+      if (image.cloudinary_image_id === publicId) imageIndex = index;
+    }
+    if (imageIndex === -1 || imageIndex === undefined) {
+      throw new NotFoundException(
+        `No image with publicId: ${publicId} related to product: ${name}`,
+      );
+    }
+    product.images.splice(imageIndex, 1);
+
+    await this.repo.save(product);
+
+    const imageDb = await this.imagesRepo.findOneBy({
+      cloudinary_image_id: publicId,
+    });
+
+    await this.imagesRepo.remove(imageDb);
+
+    await this.cloudinaryService.deleteFile(publicId);
+
+    return product;
+  }
+
+  async changeInventory(name: string, operation: string, quantity: number) {
+    const product = await this.repo.findOneBy({ name });
+    if (operation === 'add') {
+      product.inventory = product.inventory + quantity;
+    } else if (operation === 'remove') {
+      product.inventory = product.inventory - quantity;
+    }
+    if (product.inventory < 0) {
+      product.inventory = 0;
+    }
+
+    return this.repo.save(product);
   }
 }

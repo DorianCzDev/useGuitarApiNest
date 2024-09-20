@@ -34,6 +34,7 @@ import * as cookieParser from 'cookie-parser';
       useValue: new ValidationPipe({
         whitelist: true,
         transform: true,
+        // forbidNonWhitelisted: true,
         transformOptions: { enableImplicitConversion: true },
       }),
     },

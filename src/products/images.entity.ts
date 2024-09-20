@@ -12,6 +12,8 @@ export class Images {
   @Column({ default: '/example.png', length: 200 })
   image_url: string;
 
-  @ManyToOne(() => Products, (product) => product.images)
+  @ManyToOne(() => Products, (product) => product.images, {
+    onDelete: 'CASCADE',
+  })
   product: Products;
 }
