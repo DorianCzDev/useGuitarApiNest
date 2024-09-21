@@ -12,6 +12,8 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { Request } from 'express';
 import { Products } from 'src/products/products.entity';
 import { DeliveryMethods } from 'src/delivery-methods/delivery-methods.entity';
+import { Users } from 'src/users/users.entity';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -22,6 +24,7 @@ export class OrdersService {
     @InjectRepository(Products) private productsRepo: Repository<Products>,
     @InjectRepository(DeliveryMethods)
     private deliveryRepo: Repository<DeliveryMethods>,
+    @InjectRepository(Users) private usersRepo: Repository<Users>,
   ) {}
 
   async create(createOrderDto: CreateOrderDto, req: Request) {
@@ -65,11 +68,21 @@ export class OrdersService {
       );
     }
 
+    const user = await this.usersRepo.findOneBy({ id: req.user.id });
+
     const order = this.ordersRepo.create({
       total: serverTotalPrice,
       userId: req.user.id,
       deliveryMethod: createOrderDto.supplier,
       deliveryCost: createOrderDto.deliveryCost,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      postCode: user.postCode,
+      address: user.address,
+      city: user.city,
+      country: user.country,
+      phoneNumber: user.phoneNumber,
     });
 
     await this.ordersRepo.save(order);
@@ -108,12 +121,12 @@ export class OrdersService {
       result.andWhere(`orders.id = :${id}`, { [id]: id });
     }
     if (lastName) {
-      result.andWhere(`orders.last_name = :${lastName}`, {
+      result.andWhere(`orders.last_name ~ :${lastName}`, {
         [lastName]: lastName,
       });
     }
     if (email) {
-      result.andWhere(`orders.email = :${email}`, { [email]: email });
+      result.andWhere(`orders.email ~ :${email}`, { [email]: email });
     }
 
     const limit = 10;
@@ -149,4 +162,26 @@ export class OrdersService {
     const orders = await this.ordersRepo.findBy({ userId: id });
     return orders;
   }
+
+  async update(id: number, body: UpdateOrderDto) {
+    const order = await this.ordersRepo.findOneBy({ id });
+    Object.assign(order, body);
+    return this.ordersRepo.save(order);
+  }
+
+  // async getStats() {
+  //   const date = new Date();
+  //   const pastYear = date.getFullYear() - 1;
+  //   date.setFullYear(pastYear);
+  //   date.setDate(1);
+
+  //   const orders = this.ordersRepo
+  //     .createQueryBuilder('orders')
+  //     .select('orders.*')
+  //     .addSelect('jsonb_agg(order_products.*)', 'orderProducts')
+  //     .leftJoin('order_products', 'order_products', 'orders.id = order_id')
+  //     .groupBy('orders.id');
+
+  //   return orders.getRawMany();
+  // }
 }

@@ -23,8 +23,9 @@ export class Reviews {
   @Column({ nullable: false })
   rating: number;
 
-  @Column({ default: false })
-  is_reported: boolean;
+  // temp
+  @Column({ default: true, name: 'is_reported' })
+  isReported: boolean;
 
   @ManyToOne(() => Products, (product) => product.reviews, {
     onDelete: 'CASCADE',
@@ -35,6 +36,7 @@ export class Reviews {
   @ManyToOne(() => Users, (user) => user.reviews, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'user_id' })
   user: number;
 
   @CreateDateColumn()

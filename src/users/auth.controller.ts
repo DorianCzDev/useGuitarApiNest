@@ -1,18 +1,18 @@
 import {
   Body,
   Controller,
-  Get,
+  Delete,
   Post,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Request, Response } from 'express';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -34,7 +34,7 @@ export class AuthController {
     return user;
   }
 
-  @Get('signout')
+  @Delete('signout')
   @UseGuards(AuthGuard)
   async signOut(@Req() req: Request, @Res() res: Response) {
     return this.authService.signout(req, res);

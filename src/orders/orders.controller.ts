@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   Req,
@@ -13,6 +14,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { Request } from 'express';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AdminGuard } from 'src/guards/admin.guard';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -51,4 +53,16 @@ export class OrdersController {
   getOrder(@Param('id') id: string, @Req() req: Request) {
     return this.ordersService.get(parseInt(id), req);
   }
+
+  @Patch(':id')
+  @UseGuards(AdminGuard)
+  updateOrder(@Param('id') id: string, @Body() body: UpdateOrderDto) {
+    return this.ordersService.update(parseInt(id), body);
+  }
+
+  // @Get('stats')
+  // @UseGuards(AdminGuard)
+  // getOrdersStatistics() {
+  //   return this.ordersService.getStats();
+  // }
 }

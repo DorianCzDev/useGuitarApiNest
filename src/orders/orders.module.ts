@@ -6,6 +6,7 @@ import { Orders } from './orders.entity';
 import { OrderProducts } from './order-products.entity';
 import { Products } from 'src/products/products.entity';
 import { DeliveryMethods } from 'src/delivery-methods/delivery-methods.entity';
+import { Users } from 'src/users/users.entity';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { DeliveryMethods } from 'src/delivery-methods/delivery-methods.entity';
       OrderProducts,
       Products,
       DeliveryMethods,
+      Users,
     ]),
   ],
   controllers: [OrdersController],

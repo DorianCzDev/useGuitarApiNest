@@ -10,7 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  Req,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
@@ -20,8 +19,6 @@ import { AdminGuard } from 'src/guards/admin.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { GetAllProductsDto } from './dto/get-all-products.dto';
 import { ProductsService } from './products.service';
-import { Request } from 'express';
-import { Products } from './products.entity';
 
 @Controller('products')
 export class ProductsController {
@@ -61,7 +58,7 @@ export class ProductsController {
   @UseGuards(AdminGuard)
   @UseInterceptors(FilesInterceptor('images[]'))
   updateProduct(
-    @Body() body: Partial<Products>,
+    @Body() body: CreateProductDto,
     @Param('id') id: string,
     @UploadedFiles(
       new ParseFilePipeBuilder()

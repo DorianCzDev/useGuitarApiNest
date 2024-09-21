@@ -11,8 +11,12 @@ import { Request } from 'express';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { updateUserPasswordDto } from './dto/update-user-password.dto';
 import { UsersService } from './users.service';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserDto } from './dto/user.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
 
 @Controller('users')
+@Serialize(UserDto)
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
@@ -24,6 +28,12 @@ export class UsersController {
       body.newPassword,
       req,
     );
+  }
+
+  @Patch()
+  @UseGuards(AuthGuard)
+  updateUser(@Body() body: UpdateUserDto, @Req() req: Request) {
+    return this.usersService.update(body, req);
   }
 
   @Post('forgot-password')

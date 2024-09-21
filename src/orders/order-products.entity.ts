@@ -1,13 +1,10 @@
 import { Products } from 'src/products/products.entity';
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
 } from 'typeorm';
 import { Orders } from './orders.entity';
 
@@ -18,9 +15,6 @@ export class OrderProducts {
 
   @Column()
   name: string;
-
-  //   @Column()
-  //   image: string;
 
   @Column()
   price: number;
@@ -36,10 +30,4 @@ export class OrderProducts {
   })
   @JoinColumn({ name: 'order_id' })
   order: number;
-
-  @CreateDateColumn()
-  created_at: Date;
-
-  @UpdateDateColumn()
-  updated_at: Date;
 }

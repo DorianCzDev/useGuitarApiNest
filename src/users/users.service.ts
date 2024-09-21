@@ -11,6 +11,7 @@ import { Request } from 'express';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import sendResetPasswordEmail from '../utils/sendResetPasswordEmail';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -107,5 +108,16 @@ export class UsersService {
     throw new BadRequestException(
       'Your forgot password token has expired. Please try again',
     );
+  }
+
+  async update(body: UpdateUserDto, req: Request) {
+    const {
+      user: { id },
+    } = req;
+    const user = await this.repo.findOneBy({ id });
+
+    Object.assign(user, body);
+
+    return this.repo.save(user);
   }
 }

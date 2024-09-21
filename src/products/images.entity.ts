@@ -6,7 +6,7 @@ export class Images {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 140 })
   cloudinary_image_id: string;
 
   @Column({ default: '/example.png', length: 200 })

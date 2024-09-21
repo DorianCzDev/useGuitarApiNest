@@ -9,15 +9,59 @@ import featureToArray from 'src/utils/featureToArray';
 import { Repository } from 'typeorm';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { Reviews } from './reviews.entity';
+import { Products } from 'src/products/products.entity';
 
 @Injectable()
 export class ReviewsService {
-  constructor(@InjectRepository(Reviews) private repo: Repository<Reviews>) {}
+  constructor(
+    @InjectRepository(Reviews) private repo: Repository<Reviews>,
+    @InjectRepository(Products) private productsRepo: Repository<Products>,
+  ) {}
 
-  create(productId: string, reviewDto: CreateReviewDto, req: Request) {
+  async create(productId: number, reviewDto: CreateReviewDto, req: Request) {
     const review = this.repo.create(reviewDto);
-    review.product = parseInt(productId);
+    const product = await this.productsRepo.findOneBy({ id: productId });
+    if (!product) {
+      throw new NotFoundException('No product with given id');
+    }
+    review.product = productId;
     review.user = req.user.id;
+    return this.repo.save(review);
+  }
+
+  async getReported(page: number) {
+    const result = this.repo
+      .createQueryBuilder('reviews')
+      .select('reviews.*')
+      .where('is_reported = true');
+
+    const reviewsCount = await result.getCount();
+
+    const limit = 4;
+    const skip = (page - 1) * limit;
+
+    const reviews = await result.offset(skip).limit(limit).getRawMany();
+
+    return { reviews, reviewsCount };
+  }
+
+  async remove(id: number) {
+    const review = await this.repo.findOneBy({ id });
+    if (!review) {
+      throw new NotFoundException('No review found');
+    }
+
+    return this.repo.remove(review);
+  }
+
+  async removeFromReported(id: number) {
+    const review = await this.repo.findOneBy({ id });
+    if (!review) {
+      throw new NotFoundException('No review found');
+    }
+
+    review.isReported = false;
+
     return this.repo.save(review);
   }
 

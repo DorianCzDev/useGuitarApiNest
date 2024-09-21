@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -6,6 +7,7 @@ import {
   Max,
   MaxLength,
   Min,
+  MinLength,
 } from 'class-validator';
 
 export class CreateProductDto {
@@ -14,7 +16,7 @@ export class CreateProductDto {
   name: string;
 
   @IsString()
-  @IsEnum(['guitar', 'amp', 'pickup', 'multi effect'])
+  @IsEnum(['guitar', 'amplifier', 'pickup', 'multi effect'])
   category: string;
 
   @IsString()
@@ -33,21 +35,170 @@ export class CreateProductDto {
   ])
   subcategory: string;
 
-  @IsString()
-  @IsOptional()
-  body: string;
-
-  @IsString()
-  @IsOptional()
-  neck: string;
-
   @IsNumber()
   @Min(1)
   @Max(100000000)
-  regular_price: number;
+  regularPrice: number;
 
   @IsNumber()
   @Min(0)
   @Max(99)
   discount: number;
+
+  @IsNumber()
+  @IsOptional()
+  inventory: number;
+
+  @IsString()
+  @MinLength(1)
+  @MaxLength(2000)
+  description: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isFeatured: boolean;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(40)
+  body: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(40)
+  neck: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(40)
+  bridgePickup: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(40)
+  middlePickup: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(40)
+  neckPickup: string;
+
+  @IsNumber()
+  @IsOptional()
+  fretsNumber: number;
+
+  @IsBoolean()
+  @IsOptional()
+  leftHanded: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  stringsNumber: number;
+
+  @IsString()
+  @IsOptional()
+  @IsEnum(['H', 'HH', 'HHH', 'S', 'SS', 'SSS', 'HS', 'HHS'])
+  pickups: string;
+
+  @IsBoolean()
+  @IsOptional()
+  tremolo: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  pickupsActive: boolean;
+
+  @IsString()
+  @IsOptional()
+  @IsEnum(['humbucker', 'single coil', 'mixed'])
+  pickupsType: string;
+
+  @IsString()
+  @IsOptional()
+  speakers: string;
+
+  @IsNumber()
+  @IsOptional()
+  power: number;
+
+  @IsNumber()
+  @IsOptional()
+  weight: number;
+
+  @IsBoolean()
+  @IsOptional()
+  footSwitchConnection: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  channels: number;
+
+  @IsNumber()
+  @IsOptional()
+  memorySlots: number;
+
+  @IsBoolean()
+  @IsOptional()
+  headphoneOutput: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  effectProcessor: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  recordingOutput: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  reverb: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  lineInput: number;
+
+  @IsNumber()
+  @IsOptional()
+  pickupStringsNumber: number;
+
+  @IsBoolean()
+  @IsOptional()
+  active: boolean;
+
+  @IsString()
+  @IsOptional()
+  output: string;
+
+  @IsBoolean()
+  @IsOptional()
+  kappe: boolean;
+
+  @IsNumber()
+  @IsOptional()
+  wiring: number;
+
+  @IsEnum(['humbucker', 'single coil'])
+  @IsString()
+  @IsOptional()
+  pickup: string;
+
+  @IsBoolean()
+  @IsOptional()
+  auxPort: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  usePort: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  effects: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  ampModeling: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  drumComputer: boolean;
 }

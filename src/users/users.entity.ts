@@ -1,25 +1,50 @@
 import { Orders } from 'src/orders/orders.entity';
-import { Reviews } from '../reviews/reviews.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Reviews } from '../reviews/reviews.entity';
+const countries = require('../utils/countries');
 
 @Entity()
 export class Users {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 40 })
+  @Column({ length: 50, unique: true })
   email: string;
 
-  @Column()
+  @Column({ length: 100 })
   password: string;
+
+  @Column({ name: 'first_name', length: 40, nullable: true })
+  firstName: string;
+
+  @Column({ name: 'last_name', length: 40, nullable: true })
+  lastName: string;
+
+  @Column({ name: 'post_code', length: 10, nullable: true })
+  postCode: string;
+
+  @Column({ length: 40, nullable: true })
+  address: string;
+
+  @Column({ length: 40, nullable: true })
+  city: string;
+
+  @Column({
+    type: 'enum',
+    enum: countries,
+    nullable: true,
+  })
+  country: string;
+
+  @Column({ name: 'phone_number', length: 20, nullable: true })
+  phoneNumber: string;
 
   @Column({
     type: 'enum',
