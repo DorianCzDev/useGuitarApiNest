@@ -12,8 +12,8 @@ import {
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Request } from 'express';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { AdminGuard } from 'src/guards/admin.guard';
+import { AuthGuard } from '../guards/auth.guard';
+import { AdminGuard } from '../guards/admin.guard';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('orders')

@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { Repository } from 'typeorm';
 import featureToArray from '../utils/featureToArray';
 import { CreateProductDto } from './dto/create-product.dto';

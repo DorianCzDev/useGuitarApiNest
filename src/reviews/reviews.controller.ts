@@ -11,10 +11,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewsService } from './reviews.service';
-import { AdminGuard } from 'src/guards/admin.guard';
+import { AdminGuard } from '../guards/admin.guard';
 
 @Controller('reviews')
 export class ReviewsController {

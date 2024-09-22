@@ -15,7 +15,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { AdminGuard } from 'src/guards/admin.guard';
+import { AdminGuard } from '../guards/admin.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { GetAllProductsDto } from './dto/get-all-products.dto';
 import { ProductsService } from './products.service';

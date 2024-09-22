@@ -4,11 +4,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from '../users/users.service';
 import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
-import { Users } from 'src/users/users.entity';
-import { cookieResponse } from 'src/utils/jwt';
+import { Users } from '../users/users.entity';
+import { cookieResponse } from '../utils/jwt';
 
 declare global {
   namespace Express {

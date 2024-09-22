@@ -8,12 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { updateUserPasswordDto } from './dto/update-user-password.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { Serialize } from '../interceptors/serialize.interceptor';
 
 @Controller('users')
 @Serialize(UserDto)

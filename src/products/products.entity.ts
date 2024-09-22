@@ -1,4 +1,4 @@
-import { OrderProducts } from 'src/orders/order-products.entity';
+import { OrderProducts } from '../orders/order-products.entity';
 import {
   BeforeInsert,
   BeforeUpdate,

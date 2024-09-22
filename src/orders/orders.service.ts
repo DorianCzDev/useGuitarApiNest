@@ -10,9 +10,9 @@ import { Repository } from 'typeorm';
 import { OrderProducts } from './order-products.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Request } from 'express';
-import { Products } from 'src/products/products.entity';
-import { DeliveryMethods } from 'src/delivery-methods/delivery-methods.entity';
-import { Users } from 'src/users/users.entity';
+import { Products } from '../products/products.entity';
+import { DeliveryMethods } from '../delivery-methods/delivery-methods.entity';
+import { Users } from '../users/users.entity';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()

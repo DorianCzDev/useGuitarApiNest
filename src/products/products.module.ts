@@ -4,7 +4,7 @@ import { ProductsController } from './products.controller';
 import { Products } from './products.entity';
 import { ProductsService } from './products.service';
 import { Images } from './images.entity';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Products, Images])],

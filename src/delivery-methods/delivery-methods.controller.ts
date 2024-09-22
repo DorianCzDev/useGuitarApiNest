@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { DeliveryMethodsService } from './delivery-methods.service';
 import { CreateDeliveryMethodDto } from './dto/create-delivery-mothod.dto';
-import { AdminGuard } from 'src/guards/admin.guard';
+import { AdminGuard } from '../guards/admin.guard';
 
 @Controller('delivery')
 export class DeliveryMethodsController {

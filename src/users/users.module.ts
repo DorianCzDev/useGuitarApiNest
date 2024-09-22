@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './users.entity';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { AuthenticateUser } from 'src/middlewares/authentication.middleware';
+import { AuthenticateUser } from '../middlewares/authentication.middleware';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Users])],
