@@ -1,4 +1,5 @@
 import { config } from 'dotenv';
+import { url } from 'inspector';
 import { DataSource } from 'typeorm';
 
 config({ path: `.env.${process.env.NODE_ENV}` });
@@ -32,6 +33,21 @@ switch (process.env.NODE_ENV) {
     });
     break;
   case 'production':
+    Object.assign(connectionSource, {
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      port: 12776,
+      database: process.env.DB_NAME,
+      entities: ['**/*.entity.js'],
+      migrations: ['dist/migrations/*.js'],
+      ssl: {
+        rejectUnauthorized: true,
+        ca: process.env.DB_CA,
+      },
+      synchronize: false,
+    });
     break;
   default:
     throw new Error('Unknows environment');
