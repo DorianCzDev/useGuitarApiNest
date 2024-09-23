@@ -5,13 +5,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from './users.entity';
-import { Repository } from 'typeorm';
-import { Request } from 'express';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { Request } from 'express';
+import { Repository } from 'typeorm';
 import sendResetPasswordEmail from '../utils/sendResetPasswordEmail';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Users } from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -108,6 +108,21 @@ export class UsersService {
     throw new BadRequestException(
       'Your forgot password token has expired. Please try again',
     );
+  }
+
+  async getCurrentUser(req: Request) {
+    if (!req?.user?.id) {
+      throw new BadRequestException('Please log in');
+    }
+    const user = await this.repo.findOneBy({ id: req.user.id });
+    if (!user) {
+      throw new BadRequestException('Please log in');
+    }
+    if (!user.role || user.role !== 'admin') {
+      throw new UnauthorizedException('Invalid Crudentials');
+    }
+
+    return user;
   }
 
   async update(body: UpdateUserDto, req: Request) {

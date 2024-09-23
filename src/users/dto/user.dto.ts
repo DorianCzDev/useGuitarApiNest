@@ -4,6 +4,8 @@ export class UserDto {
   @Expose()
   email: string;
   @Expose()
+  role: string;
+  @Expose()
   firstName: string;
   @Expose()
   lastName: string;
