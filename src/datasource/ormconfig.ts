@@ -1,5 +1,4 @@
 import { config } from 'dotenv';
-import { url } from 'inspector';
 import { DataSource } from 'typeorm';
 
 config({ path: `.env.${process.env.NODE_ENV}` });

@@ -16,7 +16,10 @@ import * as cookieParser from 'cookie-parser';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`,
+      envFilePath:
+        process.env.NODE_ENV !== 'production'
+          ? `.env.${process.env.NODE_ENV}`
+          : '.env.local',
     }),
     ProductsModule,
     TypeOrmModule,
