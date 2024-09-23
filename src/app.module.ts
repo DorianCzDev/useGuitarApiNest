@@ -10,7 +10,7 @@ import { UsersModule } from './users/users.module';
 import { DeliveryMethodsModule } from './delivery-methods/delivery-methods.module';
 import { OrdersModule } from './orders/orders.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 
 @Module({
   imports: [

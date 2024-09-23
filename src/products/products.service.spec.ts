@@ -26,7 +26,7 @@ describe('ProductsService', () => {
         const product = {
           id: Math.floor(Math.random() * 999999),
           name: productDto.name,
-          price: productDto.price,
+          regularPrice: productDto.regularPrice,
           category: productDto.category,
         } as Products;
         products.push(product);
