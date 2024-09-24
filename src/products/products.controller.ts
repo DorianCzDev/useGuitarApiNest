@@ -67,7 +67,6 @@ export class ProductsController {
     )
     images: Array<Express.Multer.File>,
   ) {
-    // console.log(body);
     return this.productsService.update(parseInt(id), body, images);
   }
 

@@ -57,7 +57,7 @@ export class CreateProductDto {
   description: string;
 
   @IsBoolean()
-  @Transform(({ value: v }) => v === 'true' || v === true)
+  @ToBoolean()
   @IsOptional()
   isFeatured: boolean;
 
@@ -91,7 +91,7 @@ export class CreateProductDto {
   fretsNumber: number;
 
   @IsBoolean()
-  @Transform(({ value }) => value === 'true')
+  @ToBoolean()
   @IsOptional()
   leftHanded: boolean;
 
@@ -99,10 +99,11 @@ export class CreateProductDto {
   @IsOptional()
   stringsNumber: number;
 
-  @IsString()
   @IsEnum(['H', 'HH', 'HHH', 'S', 'SS', 'SSS', 'HS', 'HHS'])
+  @IsString()
   @Transform(({ value }) => {
     if (value === '') return null;
+    else return value;
   })
   @IsOptional()
   pickups: string;
@@ -117,10 +118,11 @@ export class CreateProductDto {
   @IsOptional()
   pickupsActive: boolean;
 
-  @IsString()
   @IsEnum(['humbucker', 'single coil', 'mixed'])
+  @IsString()
   @Transform(({ value }) => {
     if (value === '') return null;
+    else return value;
   })
   @IsOptional()
   pickupsType: string;
