@@ -10,7 +10,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { ToBoolean } from 'src/decorators/toBoolean';
+import { ToBoolean } from '../../decorators/toBoolean';
 
 export class CreateProductDto {
   @IsString()
