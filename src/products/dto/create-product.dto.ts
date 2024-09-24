@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
@@ -9,6 +10,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
+import { ToBoolean } from 'src/decorators/toBoolean';
 
 export class CreateProductDto {
   @IsString()
@@ -55,6 +57,7 @@ export class CreateProductDto {
   description: string;
 
   @IsBoolean()
+  @Transform(({ value: v }) => v === 'true' || v === true)
   @IsOptional()
   isFeatured: boolean;
 
@@ -88,6 +91,7 @@ export class CreateProductDto {
   fretsNumber: number;
 
   @IsBoolean()
+  @Transform(({ value }) => value === 'true')
   @IsOptional()
   leftHanded: boolean;
 
@@ -96,21 +100,29 @@ export class CreateProductDto {
   stringsNumber: number;
 
   @IsString()
-  @IsOptional()
   @IsEnum(['H', 'HH', 'HHH', 'S', 'SS', 'SSS', 'HS', 'HHS'])
+  @Transform(({ value }) => {
+    if (value === '') return null;
+  })
+  @IsOptional()
   pickups: string;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   tremolo: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   pickupsActive: boolean;
 
   @IsString()
-  @IsOptional()
   @IsEnum(['humbucker', 'single coil', 'mixed'])
+  @Transform(({ value }) => {
+    if (value === '') return null;
+  })
+  @IsOptional()
   pickupsType: string;
 
   @IsString()
@@ -126,6 +138,7 @@ export class CreateProductDto {
   weight: number;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   footSwitchConnection: boolean;
 
@@ -138,18 +151,22 @@ export class CreateProductDto {
   memorySlots: number;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   headphoneOutput: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   effectProcessor: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   recordingOutput: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   reverb: boolean;
 
@@ -162,6 +179,7 @@ export class CreateProductDto {
   pickupStringsNumber: number;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   active: boolean;
 
@@ -170,6 +188,7 @@ export class CreateProductDto {
   output: string;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   kappe: boolean;
 
@@ -183,22 +202,27 @@ export class CreateProductDto {
   pickup: string;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   auxPort: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   usePort: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   effects: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   ampModeling: boolean;
 
   @IsBoolean()
+  @ToBoolean()
   @IsOptional()
   drumComputer: boolean;
 }

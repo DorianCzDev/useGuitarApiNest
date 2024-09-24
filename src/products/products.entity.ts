@@ -111,6 +111,9 @@ export class Products {
   })
   pickupsType: string;
 
+  @Column({ default: false, name: 'is_featured' })
+  isFeatured: boolean;
+
   //amp
 
   @Column({ nullable: true })
@@ -182,9 +185,6 @@ export class Products {
 
   @Column({ name: 'drum_computer', nullable: true })
   drumComputer: boolean;
-
-  @Column({ default: false, name: 'is_featured' })
-  isFeatured: boolean;
 
   @OneToMany(() => Images, (image) => image.product, { eager: true })
   images: Images[];

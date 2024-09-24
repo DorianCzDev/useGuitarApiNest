@@ -13,6 +13,8 @@ import {
   UploadedFiles,
   UseGuards,
   UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AdminGuard } from '../guards/admin.guard';
@@ -67,6 +69,7 @@ export class ProductsController {
     )
     images: Array<Express.Multer.File>,
   ) {
+    // console.log(body);
     return this.productsService.update(parseInt(id), body, images);
   }
 
