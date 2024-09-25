@@ -211,7 +211,7 @@ export class CreateProductDto {
   @IsBoolean()
   @ToBoolean()
   @IsOptional()
-  usePort: boolean;
+  usbPort: boolean;
 
   @IsBoolean()
   @ToBoolean()

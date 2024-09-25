@@ -175,7 +175,7 @@ export class Products {
   auxPort: boolean;
 
   @Column({ name: 'usb_port', nullable: true })
-  usePort: boolean;
+  usbPort: boolean;
 
   @Column({ nullable: true })
   effects: boolean;
