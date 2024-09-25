@@ -83,6 +83,10 @@ export class ProductsService {
   async getAll(query: Partial<GetAllProductsDto>) {
     let { sort, page } = query;
 
+    if (query.category === 'multi effects') {
+      query.category = 'multi effect';
+    }
+
     delete query.sort;
     delete query.page;
 
@@ -119,15 +123,23 @@ export class ProductsService {
 
     for (let obj of queryObjectFromArray) {
       const [array] = Object.entries(obj);
-      const [key, value] = array;
+      let [key, value] = array;
       if (key.includes('min')) {
+        if (key.includes('price')) {
+          value = value * 100;
+        }
         const field = key.split('-')[1];
         result.andWhere(`${field} >= :${value}`, { [value]: parseInt(value) });
       } else if (key.includes('max')) {
+        if (key.includes('price')) {
+          value = value * 100;
+        }
         const field = key.split('-')[1];
         result.andWhere(`${field} <= :${value}`, { [value]: parseInt(value) });
       } else if (key === 'name') {
         result.andWhere(`${key} ~ :${value}`, { [value]: value });
+      } else if (typeof value === 'string' && value.includes(' ')) {
+        result.andWhere(`${key} = '${value}'`);
       } else {
         result.andWhere(`${key} = :${value}`, { [value]: value });
       }
@@ -143,7 +155,7 @@ export class ProductsService {
       result.orderBy('products.created_at');
     }
 
-    const limit = 10;
+    const limit = query.category ? 12 : 10;
 
     const currPage = parseInt(page) || 1;
 
@@ -164,7 +176,7 @@ export class ProductsService {
 
     const products = await result.getRawMany();
 
-    return { products, productsCount };
+    return { products, productsCount, productsBody, productsNeck };
   }
 
   async getByName(name: string) {
