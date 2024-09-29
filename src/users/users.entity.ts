@@ -54,6 +54,12 @@ export class Users {
   role: string;
 
   @Column({ nullable: true })
+  verificationToken: string;
+
+  @Column({ default: true })
+  isActive: boolean;
+
+  @Column({ nullable: true })
   refreshToken: string;
 
   @Column({ nullable: true })
