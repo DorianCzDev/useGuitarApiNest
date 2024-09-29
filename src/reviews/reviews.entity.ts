@@ -23,8 +23,7 @@ export class Reviews {
   @Column({ nullable: false })
   rating: number;
 
-  // temp
-  @Column({ default: true, name: 'is_reported' })
+  @Column({ name: 'is_reported' })
   isReported: boolean;
 
   @ManyToOne(() => Products, (product) => product.reviews, {

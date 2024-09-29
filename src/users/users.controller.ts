@@ -20,7 +20,7 @@ import { UsersService } from './users.service';
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
-  @Serialize(UserDto)
+
   @Patch('update-password')
   @UseGuards(AuthGuard)
   updateUserPassword(@Body() body: updateUserPasswordDto, @Req() req: Request) {
@@ -30,6 +30,7 @@ export class UsersController {
       req,
     );
   }
+
   @Patch()
   @UseGuards(AuthGuard)
   updateUser(@Body() body: UpdateUserDto, @Req() req: Request) {

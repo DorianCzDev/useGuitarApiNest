@@ -26,6 +26,12 @@ export class ReviewsController {
     return this.reviewsService.getReported(parseInt(page));
   }
 
+  @Patch('report/:id')
+  @UseGuards(AuthGuard)
+  reportReview(@Param('id') id: string) {
+    return this.reviewsService.report(parseInt(id));
+  }
+
   @Post(':productId')
   @UseGuards(AuthGuard)
   createReview(

@@ -137,11 +137,9 @@ export class ProductsService {
         const field = key.split('-')[1];
         result.andWhere(`${field} <= :${value}`, { [value]: parseInt(value) });
       } else if (key === 'name') {
-        result.andWhere(`${key} ~ :${value}`, { [value]: value });
-      } else if (typeof value === 'string' && value.includes(' ')) {
-        result.andWhere(`${key} = '${value}'`);
+        result.andWhere(`${key} ~ :${key}`, { [key]: value });
       } else {
-        result.andWhere(`${key} = :${value}`, { [value]: value });
+        result.andWhere(`${key} = :${key}`, { [key]: value });
       }
     }
 
@@ -155,6 +153,14 @@ export class ProductsService {
       result.orderBy('products.created_at');
     }
 
+    let productsBody = [];
+    let productsNeck = [];
+
+    if (query.category === 'guitar') {
+      const products = await result.getRawMany();
+      productsBody = featureToArray(products, 'body');
+      productsNeck = featureToArray(products, 'neck');
+    }
     const limit = query.category ? 12 : 10;
 
     const currPage = parseInt(page) || 1;
@@ -165,21 +171,28 @@ export class ProductsService {
 
     const productsCount = await result.getCount();
 
-    let productsBody = [];
-    let productsNeck = [];
-
-    if (query.category === 'guitar') {
-      const products = await result.getRawMany();
-      productsBody = featureToArray(products, 'body');
-      productsNeck = featureToArray(products, 'neck');
-    }
-
     const products = await result.getRawMany();
 
     return { products, productsCount, productsBody, productsNeck };
   }
 
   async getByName(name: string) {
+    const result = this.repo
+      .createQueryBuilder('products')
+      .select('products.*')
+      .addSelect('COUNT("product_id")', 'reviews_number')
+      .addSelect('AVG(rating)', 'avg_rating')
+      .addSelect('jsonb_agg(images.*)', 'images')
+      .leftJoin('reviews', 'reviews', 'products.id = reviews.product_id')
+      .innerJoin('images', 'images', 'products.id = "productId"')
+      .groupBy('products.id');
+
+    result.where(`name = '${name}'`);
+
+    return result.getRawOne();
+  }
+
+  async getByNamePanel(name: string) {
     const product = await this.repo.findOneBy({ name });
     if (!product) {
       throw new NotFoundException('Product not found');
@@ -264,16 +277,26 @@ export class ProductsService {
   }
 
   async getCartProducts(id: string) {
+    if (!id) {
+      return;
+    }
     const idArray = id.split('-');
     let products = [];
     for (const id of idArray) {
       let product = await this.repo.findOneBy({ id: parseInt(id) });
+      const image = await this.imagesRepo
+        .createQueryBuilder('images')
+        .select('images.*')
+        .where('"productId" = :id', { id: id })
+        .getRawOne();
+
       const { name, category, price } = product;
       const cartProduct = {
         id,
         name,
         category,
         price,
+        image: image.image_url,
         quantity: 1,
       };
       products = [...products, cartProduct];

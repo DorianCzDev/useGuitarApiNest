@@ -39,14 +39,14 @@ export class ProductsController {
     return this.productsService.create(body, images);
   }
 
-  @Get()
-  getAllProducts(@Query() query: Partial<GetAllProductsDto>) {
-    return this.productsService.getAll(query);
-  }
-
   @Get('cart/:id')
   getProductsFromCart(@Param('id') id: string) {
     return this.productsService.getCartProducts(id);
+  }
+
+  @Get()
+  getAllProducts(@Query() query: Partial<GetAllProductsDto>) {
+    return this.productsService.getAll(query);
   }
 
   @Get(':name')
@@ -54,6 +54,10 @@ export class ProductsController {
     return this.productsService.getByName(name);
   }
 
+  @Get('panel/:name')
+  getSinglePanelProduct(@Param('name') name: string) {
+    return this.productsService.getByNamePanel(name);
+  }
   @Patch(':id')
   @UseGuards(AdminGuard)
   @UseInterceptors(FilesInterceptor('images[]'))

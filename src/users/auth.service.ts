@@ -32,7 +32,7 @@ export class AuthService {
   async signin(email: string, password: string, res: Response) {
     const user = await this.repo.findOneBy({ email });
     if (!user) {
-      throw new NotFoundException('No account with given email');
+      throw new BadRequestException('Invalid email or password');
     }
 
     const isCorrect = await bcrypt.compare(password, user.password);

@@ -22,14 +22,8 @@ export class Orders {
 
   @Column({
     type: 'enum',
-    enum: [
-      'waiting for payment',
-      'waiting for shipment',
-      'send',
-      'delivered',
-      'canceled',
-    ],
-    default: 'waiting for payment',
+    enum: ['waiting for payment', 'waiting for shipment', 'send', 'canceled'],
+    default: 'send',
   })
   status: string;
 

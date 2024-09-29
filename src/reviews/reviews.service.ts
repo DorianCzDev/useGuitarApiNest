@@ -50,6 +50,15 @@ export class ReviewsService {
     return this.repo.remove(review);
   }
 
+  async report(id: number) {
+    const review = await this.repo.findOneBy({ id });
+    if (!review) {
+      throw new NotFoundException('No review found');
+    }
+    review.isReported = true;
+    return this.repo.save(review);
+  }
+
   async removeFromReported(id: number) {
     const review = await this.repo.findOneBy({ id });
     if (!review) {
@@ -62,10 +71,13 @@ export class ReviewsService {
   }
 
   async get(productId: string, rating: string) {
-    const reviews = await this.repo.findBy({ product: parseInt(productId) });
-    if (!reviews.length) {
-      throw new NotFoundException('No reviews found.');
-    }
+    const result = await this.repo
+      .createQueryBuilder('reviews')
+      .select('reviews.*')
+      .where(`reviews.product_id = :product_id`, {
+        product_id: productId,
+      })
+      .getRawMany();
 
     const ratingsCount = [
       ['1', 0],
@@ -75,7 +87,7 @@ export class ReviewsService {
       ['5', 0],
     ];
 
-    const ratingsArray = featureToArray(reviews, 'rating');
+    const ratingsArray = featureToArray(result, 'rating');
 
     for (const ratingCount of ratingsCount) {
       for (const ratingArray of ratingsArray) {
@@ -84,13 +96,18 @@ export class ReviewsService {
     }
 
     if (rating) {
-      let result = await this.repo.findBy({
-        product: parseInt(productId),
-        rating: parseInt(rating),
-      });
-      return result;
+      const result = await this.repo
+        .createQueryBuilder('reviews')
+        .select('reviews.*')
+        .where(`reviews.product_id = :product_id`, {
+          product_id: productId,
+        })
+        .andWhere('reviews.rating = :rating', { rating: rating })
+        .getRawMany();
+
+      return { reviews: result, ratingsCount };
     }
 
-    return reviews;
+    return { reviews: result, ratingsCount };
   }
 }
