@@ -49,6 +49,16 @@ export class ProductsController {
     return this.productsService.getAll(query);
   }
 
+  @Get('discounted')
+  getDiscountedProducts() {
+    return this.productsService.getDiscounted();
+  }
+
+  @Get('featured')
+  getFeaturedProducts() {
+    return this.productsService.getFeatured();
+  }
+
   @Get(':name')
   getSingleProduct(@Param('name') name: string) {
     return this.productsService.getByName(name);

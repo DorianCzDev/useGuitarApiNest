@@ -80,6 +80,36 @@ export class ProductsService {
     return product;
   }
 
+  async getFeatured() {
+    const result = this.repo
+      .createQueryBuilder('products')
+      .select('products.*')
+      .addSelect('COUNT("product_id")', 'reviews_number')
+      .addSelect('AVG(rating)', 'avg_rating')
+      .addSelect('jsonb_agg(images.*)', 'images')
+      .leftJoin('reviews', 'reviews', 'products.id = reviews.product_id')
+      .innerJoin('images', 'images', 'products.id = "productId"')
+      .where('is_featured = true')
+      .groupBy('products.id');
+
+    return result.limit(10).getRawMany();
+  }
+
+  async getDiscounted() {
+    const result = this.repo
+      .createQueryBuilder('products')
+      .select('products.*')
+      .addSelect('COUNT("product_id")', 'reviews_number')
+      .addSelect('AVG(rating)', 'avg_rating')
+      .addSelect('jsonb_agg(images.*)', 'images')
+      .leftJoin('reviews', 'reviews', 'products.id = reviews.product_id')
+      .innerJoin('images', 'images', 'products.id = "productId"')
+      .orderBy('products.discount', 'DESC')
+      .groupBy('products.id');
+
+    return result.limit(5).getRawMany();
+  }
+
   async getAll(query: Partial<GetAllProductsDto>) {
     let { sort, page } = query;
 
