@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import { Request, Response } from 'express';
-import sendVerificationEmail from 'src/utils/sendVerificationEmail';
+import sendVerificationEmail from '../utils/sendVerificationEmail';
 import { Repository } from 'typeorm';
 import { cookieResponse } from '../utils/jwt';
 import { Users } from './users.entity';
