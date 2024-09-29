@@ -58,7 +58,7 @@ export class UsersService {
 
     const forgotPasswordToken = crypto.randomBytes(40).toString('hex');
 
-    const origin = `${process.env.PUBLIC_URL}/`;
+    const origin = 'https://use-guitar-nest.vercel.app/';
 
     await sendResetPasswordEmail({
       email: user.email,
@@ -133,6 +133,22 @@ export class UsersService {
 
     Object.assign(user, body);
 
+    return this.repo.save(user);
+  }
+
+  async verifyEmail(email: string, verificationToken: string) {
+    const user = await this.repo.findOneBy({ email });
+
+    if (!user) {
+      throw new UnauthorizedException('Verification failed');
+    }
+
+    if (user.verificationToken !== verificationToken) {
+      throw new UnauthorizedException('Verification failed');
+    }
+
+    user.isActive = true;
+    user.verificationToken = null;
     return this.repo.save(user);
   }
 }

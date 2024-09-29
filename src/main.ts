@@ -7,8 +7,10 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableCors({
     allowedHeaders: ['content-type'],
-    origin:
-      process.env.FRONTEND_URL || 'https://use-guitar-panel-nest.vercel.app',
+    origin: process.env.FRONTEND_URL || [
+      'https://use-guitar-panel-nest.vercel.app',
+      'https://use-guitar-nest.vercel.app',
+    ],
     credentials: true,
   });
   await app.listen(3000);

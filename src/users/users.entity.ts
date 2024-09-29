@@ -56,7 +56,7 @@ export class Users {
   @Column({ nullable: true })
   verificationToken: string;
 
-  @Column({ default: true })
+  @Column({ default: false })
   isActive: boolean;
 
   @Column({ nullable: true })

@@ -41,6 +41,11 @@ export class UsersController {
     return this.usersService.forgotPassword(body.email);
   }
 
+  @Post('verify-email')
+  verifyUserEmail(@Body() body: { email: string; verificationToken: string }) {
+    return this.usersService.verifyEmail(body.email, body.verificationToken);
+  }
+
   @Get('whoami')
   getCurrentUser(@Req() req: Request) {
     return this.usersService.getCurrentUser(req);
@@ -48,13 +53,16 @@ export class UsersController {
 
   @Patch('reset-password')
   resetUserPassword(
-    @Query('email') email: string,
-    @Query('forgot-password-token') forgotPasswordToken: string,
-    @Body() body: { password: string },
+    @Body()
+    body: {
+      password: string;
+      forgotPasswordToken: string;
+      email: string;
+    },
   ) {
     return this.usersService.restPassword(
-      forgotPasswordToken,
-      email,
+      body.forgotPasswordToken,
+      body.email,
       body.password,
     );
   }

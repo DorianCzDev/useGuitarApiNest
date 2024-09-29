@@ -9,7 +9,7 @@ export default async function sendResetPasswordEmail({
   forgotPasswordToken: string;
   origin: string;
 }) {
-  const resetURL = `${origin}reset-password?forgot-password-token=${forgotPasswordToken}&email=${email}`;
+  const resetURL = `${origin}reset-password?forgotPasswordToken=${forgotPasswordToken}&email=${email}`;
   const message = `<p>Please reset password by clicking on the following link: <a href="${resetURL}">Reset Password</a></p>`;
 
   return sendEmail({

@@ -1,15 +1,12 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { Users } from './users.entity';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Request, Response } from 'express';
-import { cookieResponse } from '../utils/jwt';
 import * as crypto from 'crypto';
+import { Request, Response } from 'express';
+import sendVerificationEmail from 'src/utils/sendVerificationEmail';
+import { Repository } from 'typeorm';
+import { cookieResponse } from '../utils/jwt';
+import { Users } from './users.entity';
 
 @Injectable()
 export class AuthService {
@@ -22,11 +19,21 @@ export class AuthService {
     }
 
     const salt = await bcrypt.genSalt(10);
-
+    const verificationToken = crypto.randomBytes(40).toString('hex');
     password = await bcrypt.hash(password, salt);
 
-    const user = this.repo.create({ email, password });
-    return this.repo.save(user);
+    const user = this.repo.create({ email, password, verificationToken });
+
+    const origin = 'https://use-guitar-nest.vercel.app/';
+
+    await sendVerificationEmail({
+      email: user.email,
+      verificationToken: user.verificationToken,
+      origin,
+    });
+
+    await this.repo.save(user);
+    return;
   }
 
   async signin(email: string, password: string, res: Response) {
@@ -34,7 +41,11 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException('Invalid email or password');
     }
-
+    if (!user.isActive) {
+      throw new BadRequestException(
+        'Your account is not active, please check your email for more details',
+      );
+    }
     const isCorrect = await bcrypt.compare(password, user.password);
 
     if (!isCorrect) {
