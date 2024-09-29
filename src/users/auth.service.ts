@@ -80,8 +80,18 @@ export class AuthService {
 
     await this.repo.save(user);
 
-    res.clearCookie('refreshToken');
-    res.clearCookie('accessToken');
+    res.cookie('accessToken', 'logout', {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(Date.now()),
+    });
+    res.cookie('refreshToken', 'logout', {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      expires: new Date(Date.now()),
+    });
 
     return res.send();
   }
